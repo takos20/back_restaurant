@@ -86,20 +86,6 @@ class HospitalViewSet(viewsets.ModelViewSet):
     filterset_class = HospitalFilter
     filter_backends = (filters.DjangoFilterBackend,)
 
-    
-    def get_queryset(self):
-        user = self.request.user
-
-        qs = (
-            Hospital.objects
-            .select_related('hospital')   # très important
-            .filter(deleted=False)
-        )
-
-        if user.hospital_id:
-            qs = qs.filter(hospital_id=user.hospital_id)
-
-        return qs
        
     def create(self, request, *args, **kwargs):
         if request.data['rules_reduction'] != '[]':
@@ -295,10 +281,15 @@ class UserViewSet(viewsets.ModelViewSet):
             my_group.user_set.add(user)
             user.role = my_group.name
             user.save()
-            ExtendedGroup.objects.create(group=my_group, hospital=user.hospital)
+            get_extented = ExtendedGroup.objects.filter(group=my_group, hospital=user.hospital).last()
+            if get_extented:
+                serializer = UserSerializer(user, many=False)
+                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                ExtendedGroup.objects.create(group=my_group, hospital=user.hospital)
             
-            serializer = UserSerializer(user, many=False)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+                serializer = UserSerializer(user, many=False)
+                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         errors = {**user_form.errors, }
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -2496,10 +2487,10 @@ class SuppliesViewSet(viewsets.ModelViewSet):
                     reference_id=request.data['supplies'],
                     hospital = user.hospital
                 )
-                supplies.supply_amount=request.data['supply_amount']
-                supplies.storage_depots_id=request.data['storage_depots']
-                supplies.supply_amount=request.data['supply_amount']
-                supplies.save()
+            supplies.supply_amount=request.data['supply_amount']
+            supplies.storage_depots_id=request.data['storage_depots']
+            supplies.supply_amount=request.data['supply_amount']
+            supplies.save()
                 
             serializer = self.get_serializer(supplies, many=False)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
@@ -5776,19 +5767,6 @@ class Type_patientViewSet(viewsets.ModelViewSet):
     filterset_class = Type_patientFilter
     filter_backends = (filters.DjangoFilterBackend,)
 
-    def get_queryset(self):
-        user = self.request.user
-
-        qs = (
-            Type_patient.objects
-            .select_related('hospital')   # très important
-            .filter(deleted=False)
-        )
-
-        if user.hospital_id:
-            qs = qs.filter(hospital_id=user.hospital_id)
-
-        return qs
    
     def get_permissions(self):
         """
@@ -6419,6 +6397,7 @@ class DetailsSuppliesViewSet(viewsets.ModelViewSet):
                 detailsSupplies.save()
                 get_supplies.supply_amount += detailsSupplies.total_amount
                 get_supplies.suppliers_id = request.data['suppliers']
+                get_supplies.storage_depots_id = request.data["storage_depots"]
                 if 'additional_info' in request.data:
                     get_supplies.additional_info = request.data['additional_info']
                 get_supplies.save()

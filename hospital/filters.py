@@ -62,6 +62,7 @@ class DetailsSuppliesFilter(django_filters.FilterSet):
     end_date = django_filters.DateFilter(field_name='createdAt', lookup_expr=('lte'))
     date_range = django_filters.DateRangeFilter(field_name='createdAt')
     ingredient = django_filters.CharFilter(field_name='ingredient__id', lookup_expr='exact')
+    supplies = django_filters.CharFilter(field_name='supplies__id', lookup_expr='exact')
 
     class Meta:
         model = DetailsSupplies
@@ -556,6 +557,7 @@ class DetailsBillsFilter(django_filters.FilterSet):
     end_date = django_filters.DateFilter(field_name='createdAt', lookup_expr=('lte'))
     date_range = django_filters.DateRangeFilter(field_name='createdAt')
     patient = django_filters.CharFilter(field_name='bills__patient__id', lookup_expr='exact')
+    bills = django_filters.CharFilter(field_name='bills__id', lookup_expr='exact')
     patient_id = django_filters.CharFilter(field_name='patient__id', lookup_expr='exact')
     user = django_filters.CharFilter(field_name='user__id', lookup_expr='exact')
 

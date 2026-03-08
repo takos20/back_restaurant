@@ -122,7 +122,7 @@ class ContentTypeSerializer(DynamicFieldsModelSerializer):
 
 
 class Type_patientSerializer(DynamicFieldsModelSerializer):
-    hospital = HospitalSerializer(many=False, fields=('id', 'name'))
+    # hospital = HospitalSerializer(many=False, fields=('id', 'name'))
     """
     Bifrost Type_diagnostic writable nested serializer
     """
@@ -923,16 +923,6 @@ class PromotionRuleSerializer(DynamicFieldsModelSerializer):
         model = PromotionRule
         fields = '__all__'
 
-class Type_patientSerializer(DynamicFieldsModelSerializer):
-    hospital = HospitalSerializer(many=False, fields=('id', 'name'))
-    """
-    Bifrost Type_diagnostic writable nested serializer
-    """
-    
-
-    class Meta:
-        model = Type_patient
-        fields = '__all__'
 class PromotionActionSerializer(DynamicFieldsModelSerializer):
     hospital = HospitalSerializer(many=False, fields=('id', 'name'))
     promotion = PromotionSerializer(many=False, fields=('id', 'name'))
