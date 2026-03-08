@@ -312,8 +312,8 @@ class SyncViewSet(viewsets.ViewSet):
                 results["failed"] += 1
 
         return Response({"message": "Batch upload terminé", "results": results}, status=201)
-    @action(detail=False, methods=['post'], url_path='download/<hospital_id>')
-    def download(self, request, hospital_id):
+    @action(detail=False, methods=['post'], url_path='download/(?P<hospital_id>[^/.]+)')
+    def download(self, request, hospital_id=None):
         force = request.data.get('force', False)
 
         if not hospital_id:
@@ -349,9 +349,8 @@ class SyncViewSet(viewsets.ViewSet):
                 status=500
             )
 
-    @action(detail=False, methods=['post'], url_path='full_sync')
-    def full_sync(self, request):
-        hospital_id = request.data.get('hospital_id')
+    @action(detail=False, methods=['post'], url_path='full_sync/(?P<hospital_id>[^/.]+)')
+    def full_sync(self, request, hospital_id=None):
 
         if not hospital_id:
             return Response({'error': 'hospital_id requis'}, status=400)
@@ -373,9 +372,8 @@ class SyncViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
     
-    @action(detail=False, methods=['post'], url_path='upload')
-    def upload(self, request):
-        hospital_id = request.data.get('hospital_id')
+    @action(detail=False, methods=['post'], url_path='upload/(?P<hospital_id>[^/.]+)')
+    def upload(self, request, hospital_id=None):
         force = request.data.get('force', False)
 
         if not hospital_id:

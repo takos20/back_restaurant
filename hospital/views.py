@@ -195,7 +195,7 @@ class HospitalViewSet(viewsets.ModelViewSet):
         user_hospital = self.request.user.hospital
         if user_hospital:
             get_user = User.objects.filter(hospital=user_hospital).count()
-            get_expensive_nature = Expenses_nature.objects.filter(hospital=user_hospital).count()
+            get_expensive_nature = Expenses_nature.objects.count()
             get_group = ExtendedGroup.objects.filter(hospital=user_hospital).count()
         else:
             get_user = User.objects.count()
