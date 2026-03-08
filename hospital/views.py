@@ -470,7 +470,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
             permissions = Permission.objects.filter(extended_permissions__hospital=hospital)
         else:
-            permissions = Permission.objects.filter(deleted=False)
+            permissions = Permission.objects.all()
         serializer_perm = PermissionsSerializer(permissions, many=True)
         # get_module=Module.objects.filter(deleted=False)
         # serial_module=ModuleSerializer(get_module,many=True)

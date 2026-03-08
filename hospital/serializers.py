@@ -145,7 +145,7 @@ class PermissionsSerializer(DynamicFieldsModelSerializer):
         fields = ('id', 'codename', 'name', 'model')
 
 
-class ExtendedPermissionSerializer(serializers.ModelSerializer):
+class ExtendedPermissionSerializer(DynamicFieldsModelSerializer):
     permission = PermissionsSerializer(read_only=True)
     hospital = HospitalSerializer(read_only=True)
 
@@ -153,7 +153,7 @@ class ExtendedPermissionSerializer(serializers.ModelSerializer):
         model = ExtendedPermission
         fields = ['id', 'is_shared', 'permission', 'hospital']
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(DynamicFieldsModelSerializer):
     permissions = PermissionsSerializer(many=True)
 
     class Meta:
@@ -161,18 +161,21 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'permissions')
 
 
-class ExtendedGroupSerializer(serializers.ModelSerializer):
-    group = GroupSerializer(many=False)
+class ExtendedGroupSerializer(DynamicFieldsModelSerializer):
+    # group = GroupSerializer(many=False)
     hospital = HospitalSerializer(many=False, fields=('id', 'name'))
-    group_name = serializers.CharField(source='group.name', read_only=True)
-    permissions = serializers.SerializerMethodField()
+    group_name = serializers.SerializerMethodField()
+    # permissions = serializers.SerializerMethodField()
 
     class Meta:
         model = ExtendedGroup
-        fields = ['id', 'group_name', 'group', 'hospital', 'permissions']
+        fields = ['id', 'group_name', 'hospital']
 
-    def get_permissions(self, obj):
-        return PermissionsSerializer(obj.get_permissions(), many=True).data
+    def get_group_name(self, obj):
+        return obj.group.name if obj.group else None
+
+    # def get_permissions(self, obj):
+    #     return PermissionsSerializer(obj.get_permissions(), many=True).data
     
     # def get_hospital(self, obj):
     #     try:
@@ -303,7 +306,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
     """
     
     patient = PatientSerializer(many=False, fields=('id', 'name'))
-    groups = GroupSerializer(many=True)
+    groups = GroupSerializer(many=True, fields=('id', 'name'))
 
     # patient = PatientSerializer(many=False)
 
@@ -757,7 +760,6 @@ class DishSerializer(DynamicFieldsModelSerializer):
     
     def get_price(self, obj):
         request = self.context.get('request', None)
-        print(request)
         if request:
             hospital = request.user.hospital
             try:
