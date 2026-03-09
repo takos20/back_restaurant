@@ -202,7 +202,7 @@ class UserMeSerializer(DynamicFieldsModelSerializer):
 
 
 class RegionSerializer(DynamicFieldsModelSerializer):
-    hospital = HospitalSerializer(many=False, fields=('id', 'name'))
+    # hospital = HospitalSerializer(many=False, fields=('id', 'name'))
     """
     Bifrost medical_areas writable nested serializer
     """
@@ -213,7 +213,7 @@ class RegionSerializer(DynamicFieldsModelSerializer):
 
 
 class CitySerializer(DynamicFieldsModelSerializer):
-    hospital = HospitalSerializer(many=False, fields=('id', 'name'))
+    # hospital = HospitalSerializer(many=False, fields=('id', 'name'))
     """
     Bifrost medical_areas writable nested serializer
     """

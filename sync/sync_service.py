@@ -325,7 +325,7 @@ class SyncService:
             local_objs = {o.uuid: o for o in Model.objects.filter(uuid__in=uuids, hospital_id=self.hospital_id)}
         else:
             local_objs = {o.uuid: o for o in Model.objects.filter(uuid__in=uuids)}
-
+        print(remote_objects)
         for remote_data in remote_objects:
             uuid = remote_data.get("uuid")
             if not uuid:

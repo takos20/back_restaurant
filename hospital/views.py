@@ -2036,19 +2036,19 @@ class CityViewSet(viewsets.ModelViewSet):
     filterset_class = CityFilter
     filter_backends = (filters.DjangoFilterBackend,)
 
-    def get_queryset(self):
-        user = self.request.user
+    # def get_queryset(self):
+    #     user = self.request.user
 
-        qs = (
-            City.objects
-            .select_related('hospital')   # très important
-            .filter(deleted=False)
-        )
+    #     qs = (
+    #         City.objects
+    #         .select_related('hospital')   # très important
+    #         .filter(deleted=False)
+    #     )
 
-        if user.hospital_id:
-            qs = qs.filter(hospital_id=user.hospital_id)
+    #     if user.hospital_id:
+    #         qs = qs.filter(hospital_id=user.hospital_id)
 
-        return qs    
+    #     return qs    
 
     def get_permissions(self):
         """
@@ -2069,7 +2069,7 @@ class CityViewSet(viewsets.ModelViewSet):
         obj_form = CityForm(request.data)
         if obj_form.is_valid():
             obj = obj_form.save()
-            obj.hospital = self.request.user.hospital
+            # obj.hospital = self.request.user.hospital
             obj.save()
             serializer = self.get_serializer(obj, many=False)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
@@ -2081,7 +2081,7 @@ class CityViewSet(viewsets.ModelViewSet):
         obj_form = CityForm(request.data, instance=obj)
         if obj_form.is_valid():
             obj = obj_form.save()
-            obj.hospital = self.request.user.hospital
+            # obj.hospital = self.request.user.hospital
             obj.save()
             serializer = self.get_serializer(obj, many=False)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -2116,26 +2116,26 @@ class CityViewSet(viewsets.ModelViewSet):
                 dbframe = empexceldata
                 data = {}
                 for dbframe in dbframe.itertuples():
-                    get_obj = City.objects.filter(hospital=self.request.user.hospital,name__icontains=dbframe.Nom).last()
+                    get_obj = City.objects.filter(name__icontains=dbframe.Nom).last()
                     if get_obj:
                         get_obj.name = dbframe.Nom
                         get_obj.save()
                     else:
                         if str(dbframe.region) == 'nan':
-                            get_region = Region.objects.filter(hospital=self.request.user.hospital,name__icontains='default').last()
+                            get_region = Region.objects.filter(name__icontains='default').last()
                             if get_region:
-                                City.objects.create(hospital = self.request.user.hospital,region_id=get_region.id,name=dbframe.Nom)
+                                City.objects.create(region_id=get_region.id,name=dbframe.Nom)
                             else:
-                                create_region = Region.objects.create(hospital = self.request.user.hospital,name='default')
-                                City.objects.create(hospital = self.request.user.hospital,region_id=create_region.id,name=dbframe.Nom)
+                                create_region = Region.objects.create(name='default')
+                                City.objects.create(region_id=create_region.id,name=dbframe.Nom)
                         else:
 
-                            get_region = Region.objects.filter(hospital=self.request.user.hospital,name__icontains=dbframe.region).last()
+                            get_region = Region.objects.filter(name__icontains=dbframe.region).last()
                             if get_region:
-                                City.objects.create(hospital = self.request.user.hospital,region_id=get_region.id,name=dbframe.Nom)
+                                City.objects.create(region_id=get_region.id,name=dbframe.Nom)
                             else:
-                                create_region = Region.objects.create(hospital = self.request.user.hospital,name=dbframe.region)
-                                City.objects.create(hospital = self.request.user.hospital,region_id=create_region.id,name=dbframe.Nom)
+                                create_region = Region.objects.create(name=dbframe.region)
+                                City.objects.create(region_id=create_region.id,name=dbframe.Nom)
                             
 
         return Response(status=status.HTTP_200_OK)
@@ -2294,19 +2294,19 @@ class RegionViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
 
     
-    def get_queryset(self):
-        user = self.request.user
+    # def get_queryset(self):
+    #     user = self.request.user
 
-        qs = (
-            Region.objects
-            .select_related('hospital')   # très important
-            .filter(deleted=False)
-        )
+    #     qs = (
+    #         Region.objects
+    #         .select_related('hospital')   # très important
+    #         .filter(deleted=False)
+    #     )
 
-        if user.hospital_id:
-            qs = qs.filter(hospital_id=user.hospital_id)
+    #     if user.hospital_id:
+    #         qs = qs.filter(hospital_id=user.hospital_id)
 
-        return qs
+    #     return qs
     
 
     def get_permissions(self):
@@ -2328,7 +2328,7 @@ class RegionViewSet(viewsets.ModelViewSet):
         obj_form = RegionForm(request.data)
         if obj_form.is_valid():
             obj = obj_form.save()
-            obj.hospital = self.request.user.hospital
+            # obj.hospital = self.request.user.hospital
             obj.save()
             serializer = self.get_serializer(obj, many=False)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
@@ -2340,7 +2340,7 @@ class RegionViewSet(viewsets.ModelViewSet):
         obj_form = RegionForm(request.data, instance=obj)
         if obj_form.is_valid():
             obj = obj_form.save()
-            obj.hospital = self.request.user.hospital
+            # obj.hospital = self.request.user.hospital
             obj.save()
             serializer = self.get_serializer(obj, many=False)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -2358,7 +2358,7 @@ class RegionViewSet(viewsets.ModelViewSet):
         data = request.data
         errors = {"name": ["This field already exists."]}
         if 'name' in data:
-            obj = Region.objects.filter(hospital=self.request.user.hospital,name__icontains=data['name'])
+            obj = Region.objects.filter(name__icontains=data['name'])
             if obj:
                 return Response(status=status.HTTP_200_OK)
             else:
@@ -2389,12 +2389,12 @@ class RegionViewSet(viewsets.ModelViewSet):
                 dbframe = empexceldata
                 data = {}
                 for dbframe in dbframe.itertuples():
-                    get_obj = Region.objects.filter(hospital=self.request.user.hospital,name__icontains=dbframe.Nom).last()
+                    get_obj = Region.objects.filter(name__icontains=dbframe.Nom).last()
                     if get_obj:
                         get_obj.name = dbframe.Nom
                         get_obj.save()
                     else:
-                        Region.objects.create(hospital = self.request.user.hospital,name=dbframe.Nom)
+                        Region.objects.create(name=dbframe.Nom)
         return Response(status=status.HTTP_200_OK)
 
     

@@ -644,24 +644,24 @@ class CategoryForm(forms.ModelForm):
 class RegionForm(forms.ModelForm):
     sync_version = forms.IntegerField(required=False)
     is_shared = forms.BooleanField(initial=False, required=False)  # Partagé entre structures
-    hospital = forms.ModelChoiceField(required=False, queryset=Hospital.objects.all())
+    # hospital = forms.ModelChoiceField(required=False, queryset=Hospital.objects.all())
     name = forms.CharField(max_length=255, required=False)
 
     class Meta:
         model = Region
-        fields = ('sync_version','is_shared','hospital','name',)
+        fields = ('sync_version','is_shared','name',)
 
 
 class CityForm(forms.ModelForm):
     sync_version = forms.IntegerField(required=False)
     is_shared = forms.BooleanField(initial=False, required=False)  # Partagé entre structures
-    hospital = forms.ModelChoiceField(required=False, queryset=Hospital.objects.all())
+    # hospital = forms.ModelChoiceField(required=False, queryset=Hospital.objects.all())
     region = forms.ModelChoiceField(required=False, queryset=Region.objects.all())
     name = forms.CharField(max_length=255, required=False)
 
     class Meta:
         model = City
-        fields = ('sync_version','is_shared','hospital','name', 'region',)
+        fields = ('sync_version','is_shared','name', 'region',)
 
 class DistrictForm(forms.ModelForm):
     sync_version = forms.IntegerField(required=False)

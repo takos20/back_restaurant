@@ -208,7 +208,7 @@ class ExtendedGroupFilter(django_filters.FilterSet):
 
 class RegionFilter(django_filters.FilterSet):
     is_shared = django_filters.BooleanFilter(lookup_expr='exact')
-    hospital = django_filters.CharFilter(field_name='hospital__id', lookup_expr='exact')
+    # hospital = django_filters.CharFilter(field_name='hospital__id', lookup_expr='exact')
     name = django_filters.CharFilter(lookup_expr='icontains')
     createdAt = django_filters.DateFilter(lookup_expr='exact')
 
@@ -237,7 +237,7 @@ class DetailsStock_movementFilter(django_filters.FilterSet):
 
 class CityFilter(django_filters.FilterSet):
     is_shared = django_filters.BooleanFilter(lookup_expr='exact')
-    hospital = django_filters.CharFilter(field_name='hospital__id', lookup_expr='exact')
+    # hospital = django_filters.CharFilter(field_name='hospital__id', lookup_expr='exact')
     name = django_filters.CharFilter(lookup_expr='icontains')
     region = django_filters.CharFilter(field_name='region__id', lookup_expr='exact')
     createdAt = django_filters.DateFilter(lookup_expr='exact')

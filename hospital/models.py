@@ -297,7 +297,7 @@ class SyncQueueItem(models.Model):
 class Region(SyncBaseModel):
     
     is_shared = models.BooleanField(default=False, null=True)  # Partagé entre structures
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True)
+    # hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True)
     code = models.CharField(max_length=255, null=True, blank=True, default=add_region)
     name = models.CharField(max_length=255, null=True, blank=True)
     
@@ -353,7 +353,7 @@ class City(SyncBaseModel):
     is_shared = models.BooleanField(default=False, null=True)  # Partagé entre structures
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True)
     code = models.CharField(max_length=255, null=True, blank=True, default=add_city)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
+    # region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
