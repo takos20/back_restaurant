@@ -8,13 +8,12 @@ class DishForm(forms.ModelForm):
     is_shared = forms.BooleanField(initial=False, required=False)  # Partagé entre structures
     category = forms.ModelChoiceField(required=False, queryset=Category.objects.all())
     name_language = forms.JSONField(required=False)
-    price = forms.CharField(required=False)
     preparation_time = forms.CharField(required=False)
     is_active = forms.BooleanField(initial=True, required=False)
 
     class Meta:
         model = Dish
-        fields = ('sync_version','is_shared', 'price', 'preparation_time', 'name_language', 'is_active', 'category')
+        fields = ('sync_version','is_shared', 'preparation_time', 'name_language', 'is_active', 'category')
 
 class DishPreparationForm(forms.ModelForm):
     sync_version = forms.IntegerField(required=False)
