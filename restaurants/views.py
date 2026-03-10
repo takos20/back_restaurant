@@ -111,12 +111,6 @@ class DishViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(
             Dish.objects.select_related('recipes').filter(recipes__isnull=False,is_active=True)
         )
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(queryset, many=True)
         return Response({'content': serializer.data})
     

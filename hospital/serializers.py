@@ -165,7 +165,7 @@ class ExtendedGroupSerializer(DynamicFieldsModelSerializer):
     # group = GroupSerializer(many=False)
     hospital = HospitalSerializer(many=False, fields=('id', 'name'))
     group_name = serializers.SerializerMethodField()
-    # permissions = serializers.SerializerMethodField()
+    permissions = serializers.SerializerMethodField()
 
     class Meta:
         model = ExtendedGroup
@@ -174,8 +174,8 @@ class ExtendedGroupSerializer(DynamicFieldsModelSerializer):
     def get_group_name(self, obj):
         return obj.group.name if obj.group else None
 
-    # def get_permissions(self, obj):
-    #     return PermissionsSerializer(obj.get_permissions(), many=True).data
+    def get_permissions(self, obj):
+        return PermissionsSerializer(obj.get_permissions(), many=True).data
     
     # def get_hospital(self, obj):
     #     try:

@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
+from drf_spectacular.views import SpectacularAPIView
 from rest_framework import routers
 from hospital.views import DetailsBillsIngredientViewSet, DetailsInventoryViewSet, DetailsPatientAccountViewSet, DetailsStock_movementViewSet, MovementStockViewSet, PatientAccountViewSet, DistrictViewSet, Stock_movementViewSet, StockViewSet, Storage_depotsViewSet, Type_patientViewSet, UserViewSet, HospitalViewSet, home_view, profile_view, \
     InsuranceViewSet, PatientViewSet, \
@@ -60,6 +60,7 @@ urlpatterns = [
     path('api/v1/refresh', RefreshTokenView.as_view(), name='refresh_token'),
     path('api/v1/login', LoginView.as_view()),
     path('api/v1/logout', user_logout, name='logout'),  # override sjwt stock token
+    path('api/v1/schema', SpectacularAPIView.as_view(), name='schema'),
     # path('api/v1/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 

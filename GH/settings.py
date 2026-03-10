@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'multiselectfield',
     'dbbackup',
     'crispy_forms',
+    'drf_spectacular',
     'mathfilters',
     'django_celery_beat',
     'hospital.apps.HospitalConfig',
@@ -198,6 +199,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # }
 # Set a time to live (5 minutes)
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
     'DEFAULT_PAGINATION_CLASS': 'globals.pagination.CustomPagination',
     'PAGE_SIZE': None,
