@@ -109,7 +109,7 @@ class DishViewSet(viewsets.ModelViewSet):
     def get_all_dishes(self, request, *args, **kwargs):
 
         queryset = self.filter_queryset(
-            Dish.objects.select_related('recipes').filter(recipes__isnull=False,is_active=True)
+            Dish.objects.select_related('recipes').filter(is_active=True)
         )
         serializer = self.get_serializer(queryset, many=True)
         return Response({'content': serializer.data})
