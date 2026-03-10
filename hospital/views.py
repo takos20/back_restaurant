@@ -605,7 +605,6 @@ class UserViewSet(viewsets.ModelViewSet):
                             permissions_list = Permission.objects.filter(extension__hospital=self.request.user.hospital)
                         else:
                             permissions_list = Permission.objects.filter(deleted=False)
-                        print(extended_group.group.id, permissions_list)
                         if extended_group:
                             # On travaille sur le vrai Group Django
                             try:
@@ -881,19 +880,19 @@ class Expenses_natureViewSet(viewsets.ModelViewSet):
     filterset_class = Expenses_natureFilter
     filter_backends = (filters.DjangoFilterBackend,)
 
-    def get_queryset(self):
-        user = self.request.user
+    # def get_queryset(self):
+    #     user = self.request.user
 
-        qs = (
-            Expenses_nature.objects
-            .select_related('hospital')   # très important
-            .filter(deleted=False)
-        )
+    #     qs = (
+    #         Expenses_nature.objects
+    #         .select_related('hospital')   # très important
+    #         .filter(deleted=False)
+    #     )
 
-        if user.hospital_id:
-            qs = qs.filter(hospital_id=user.hospital_id)
+    #     if user.hospital_id:
+    #         qs = qs.filter(hospital_id=user.hospital_id)
 
-        return qs
+    #     return qs
            
 
     def get_permissions(self):
@@ -1722,7 +1721,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
                 data = {}
                 for dbframe in dbframe.itertuples():
                     get_obj = Category.objects.filter(translations__name__icontains=dbframe.Nom_fr, hospital=self.request.user.hospital).last()
-                    print(get_obj)
                     if get_obj:
                         pass
                     else:
@@ -3286,7 +3284,7 @@ class BillViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         qs = (
-            BackupFile.objects
+            Bills.objects
             .select_related('hospital')   # très important
             .filter(deleted=False, cash__user_id=user.id, cash__is_active=True)
         )
@@ -5795,7 +5793,6 @@ class Type_patientViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         obj = self.get_object()
-        print(request.data)
         obj_form = Type_patientForm(request.data, instance=obj)
         if obj_form.is_valid():
             obj = obj_form.save()

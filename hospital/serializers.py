@@ -364,7 +364,7 @@ class CategorySerializer(DynamicFieldsModelSerializer):
 
 
 class Expenses_natureSerializer(DynamicFieldsModelSerializer):
-    hospital = HospitalSerializer(many=False, fields=('id', 'name'))
+    # hospital = HospitalSerializer(many=False, fields=('id', 'name'))
     """
     Bifrost patient writable nested serializer
     """
