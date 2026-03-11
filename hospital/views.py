@@ -3124,10 +3124,12 @@ class DetailsBillsViewSet(viewsets.ModelViewSet):
         get_details.pub = request.data['pub']
         get_details.pun = request.data['pun']
         get_details.delivery = request.data['delivery']
-        get_details.amount_net = request.data['amount_net']
-        get_details.amount_gross = request.data['amount_gross']
+        get_details.amount_net = int(request.data['quantity_served']) * int(request.data['pun'])
+        get_details.amount_gross = int(request.data['quantity_served'])* int(request.data['pub'])
         get_details.save()
-        return Response(status=status.HTTP_201_CREATED)
+        serializer = self.get_serializer(get_details, many=False)
+
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
                 # else:
         # obj = self.get_object()
         # detailsBills_form = DetailsBillsForm(data=request.data, instance=obj)
@@ -3690,27 +3692,27 @@ class BillViewSet(viewsets.ModelViewSet):
                                 get_ingredient.save()
                             get_detail=DetailsSupplies.objects.filter(hospital = self.request.user.hospital, supplies_id=save_mvt_entry.id, ingredient_id=ingredient.ingredient.id).last()
                             if get_detail:
-                                get_detail.quantity += ingredient.quantity
+                                get_detail.quantity += Decimal(ingredient.quantity)
                                 get_detail.save()
                             else:
                                 DetailsSupplies.objects.create(hospital = self.request.user.hospital, supplies_id=save_mvt_entry.id, ingredient_id=ingredient.ingredient.id, quantity=ingredient.quantity)
                         else:
                             get_ingredient = Stock.objects.filter(hospital = user.hospital, compose_ingredient_id = ingredient.compose_ingredient.id).last()
                             if get_ingredient:
-                                get_ingredient.quantity += ingredient.quantity
+                                get_ingredient.quantity += Decimal(ingredient.quantity)
                                 get_ingredient.save()
                             get_ingredient_preparation = ComposePreparation.objects.filter(hospital = user.hospital, compose_ingredient_id = ingredient.compose_ingredient.id).last()
                             if get_ingredient_preparation:
-                                get_ingredient_preparation.stock_quantity += ingredient.quantity
+                                get_ingredient_preparation.stock_quantity += Decimal(ingredient.quantity)
                                 get_ingredient_preparation.save()
                             get_details_ingredient = DetailsComposeIngredient.objects.filter(compose_ingredient_id = ingredient.compose_ingredient.id).filter(deleted=False)
                             for ingredient in get_details_ingredient:
                                 get_ingredient = Stock.objects.filter(hospital = user.hospital, ingredient_id = ingredient.ingredient.id).last()
-                                get_ingredient.quantity += ingredient.quantity
+                                get_ingredient.quantity += Decimal(ingredient.quantity)
                                 get_ingredient.save()
                                 get_detail=DetailsSupplies.objects.filter(hospital = self.request.user.hospital, supplies_id=save_mvt_entry.id, ingredient_id=ingredient.ingredient.id).last()
                                 if get_detail:
-                                    get_detail.quantity += ingredient.quantity
+                                    get_detail.quantity += Decimal(ingredient.quantity)
                                     get_detail.save()
                                 else:
                                     DetailsSupplies.objects.create(hospital = self.request.user.hospital, supplies_id=save_mvt_entry.id, ingredient_id=ingredient.ingredient.id, quantity=ingredient.quantity)

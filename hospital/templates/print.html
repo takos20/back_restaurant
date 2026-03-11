@@ -491,7 +491,7 @@
             </td>
             <td class="payment-cell">
                 <div class="payment-label">Reste à Payer</div>
-                <div class="payment-value">{{ bills.amount_due|floatformat:0|default:"0" }} FCFA</div>
+                <div class="payment-value">{{ bills.balance|floatformat:0|default:"0" }} FCFA</div>
             </td>
         </tr>
     </table>
